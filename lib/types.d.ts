@@ -14,4 +14,5 @@ export interface Car {
   mileage: number
   endDate: string
   rating: number
+  auctionList: string
 }

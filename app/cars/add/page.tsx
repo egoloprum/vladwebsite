@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Car, User } from '@/lib/types'
 
-const Page = ({}) => {
+const Page = () => {
   const userId = Cookies.get('user')
   const [formData, setFormData] = useState<Car>({
     id: 0,
@@ -18,10 +18,12 @@ const Page = ({}) => {
     releaseDate: 0,
     mileage: 0,
     endDate: '',
-    rating: 0
+    rating: 0,
+    auctionList: ''
   })
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
+  const [pdfFile, setPdfFile] = useState<File | null>(null)
 
   useEffect(() => {
     if (!userId) {
@@ -38,13 +40,16 @@ const Page = ({}) => {
       reader.onloadend = () => {
         setFormData(prev => ({
           ...prev,
-          image: reader.result as string // Set the Base64 string
+          image: reader.result as string
         }))
       }
 
       if (file) {
-        reader.readAsDataURL(file) // Convert to Base64
+        reader.readAsDataURL(file)
       }
+    } else if (name === 'pdf' && e.target.files) {
+      const file = e.target.files[0]
+      setPdfFile(file)
     } else {
       setFormData(prev => ({
         ...prev,
@@ -74,6 +79,8 @@ const Page = ({}) => {
         'Окончание даты размещения обязательно для заполнения.'
     if (!formData.rating)
       newErrors.rating = 'Оценка автомобиля обязательна для заполнения.'
+    if (!pdfFile)
+      newErrors.auctionList = 'Аукционный лист обязателен для заполнения.'
 
     if (
       formData.releaseDate <= 1885 ||
@@ -113,30 +120,41 @@ const Page = ({}) => {
       id: newId
     }
 
-    cars.push(newCar)
-    localStorage.setItem('cars', JSON.stringify(cars))
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      const pdfBase64 = reader.result as string
+      newCar.auctionList = pdfBase64
+      cars.push(newCar)
+      localStorage.setItem('cars', JSON.stringify(cars))
 
-    const storedUser = localStorage.getItem(userId)
-    if (storedUser) {
-      const user: User = JSON.parse(storedUser)
-      user.addedCars.push(newCar.id.toString())
-      localStorage.setItem(userId, JSON.stringify(user))
+      const storedUser = localStorage.getItem(userId)
+      if (storedUser) {
+        const user: User = JSON.parse(storedUser)
+        user.addedCars.push(newCar.id.toString())
+        localStorage.setItem(userId, JSON.stringify(user))
+      }
+
+      alert('Автомобиль успешно добавлен!')
+      setFormData({
+        id: 0,
+        image: '',
+        mark: '',
+        model: '',
+        releaseDate: 0,
+        mileage: 0,
+        endDate: '',
+        rating: 0,
+        auctionList: ''
+      })
+      setErrors({})
+      setPdfFile(null)
+
+      router.push(`/cars/${newCar.id}`)
     }
 
-    alert('Автомобиль успешно добавлен!')
-    setFormData({
-      id: 0,
-      image: '',
-      mark: '',
-      model: '',
-      releaseDate: 0,
-      mileage: 0,
-      endDate: '',
-      rating: 0
-    })
-    setErrors({})
-
-    router.push(`/cars/${newCar.id}`)
+    if (pdfFile) {
+      reader.readAsDataURL(pdfFile)
+    }
   }
 
   return (
@@ -224,6 +242,19 @@ const Page = ({}) => {
               onChange={handleChange}
             />
             {errors.rating && <p className="text-red-500">{errors.rating}</p>}
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label>Аукционный лист</Label>
+            <Input
+              required
+              type="file"
+              name="pdf"
+              accept="application/pdf"
+              onChange={handleChange}
+            />
+            {errors.auctionList && (
+              <p className="text-red-500">{errors.auctionList}</p>
+            )}
           </div>
           <Button type="submit" className="self-end">
             Сохранить

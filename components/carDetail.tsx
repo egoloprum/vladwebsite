@@ -54,6 +54,26 @@ export const CarDetail: FC<CarDetailProps> = ({ id }) => {
     }
   }
 
+  const handleDownloadClick = () => {
+    if (!car.auctionList) {
+      alert('Аукционный лист недоступен')
+      return
+    }
+
+    try {
+      const link = document.createElement('a')
+      link.href = car.auctionList
+      link.download = 'аукционный_лист.pdf'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+
+      setTimeout(() => URL.revokeObjectURL(car.auctionList), 10000)
+    } catch {
+      alert('Ошибка при загрузке аукционного листа.')
+    }
+  }
+
   return (
     <div>
       <div className="p-4 rounded flex gap-8 justify-center">
@@ -73,12 +93,20 @@ export const CarDetail: FC<CarDetailProps> = ({ id }) => {
           <p>Пробег: {car.mileage} км</p>
           <p>Оценка: {car.rating}</p>
           <p>Срок действия: {car.endDate}</p>
-          <Button
-            type="button"
-            className="mt-4 cursor-pointer"
-            onClick={() => clickHandler(car.id)}>
-            Добавить в Избранные
-          </Button>
+          <div className="flex flex-col">
+            <Button
+              type="button"
+              className="mt-4 cursor-pointer"
+              onClick={() => clickHandler(car.id)}>
+              Добавить в Избранные
+            </Button>
+            <Button
+              type="button"
+              className="mt-4 cursor-pointer"
+              onClick={handleDownloadClick}>
+              Скачать аукционный лист
+            </Button>
+          </div>
         </div>
       </div>
     </div>

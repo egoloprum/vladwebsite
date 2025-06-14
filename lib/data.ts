@@ -9,7 +9,8 @@ export const InitialCars: Car[] = [
     releaseDate: 2018,
     mileage: 45000,
     endDate: '2024-07-15',
-    rating: 4.5
+    rating: 4.5,
+    auctionList: '/cars/аукционный_лист.pdf'
   },
   {
     id: 2,
@@ -19,7 +20,8 @@ export const InitialCars: Car[] = [
     releaseDate: 2019,
     mileage: 38000,
     endDate: '2024-08-01',
-    rating: 4.7
+    rating: 4.7,
+    auctionList: '/cars/аукционный_лист.pdf'
   },
   {
     id: 3,
@@ -29,7 +31,8 @@ export const InitialCars: Car[] = [
     releaseDate: 2017,
     mileage: 52000,
     endDate: '2024-07-20',
-    rating: 4.8
+    rating: 4.8,
+    auctionList: '/cars/аукционный_лист.pdf'
   },
   {
     id: 4,
@@ -39,7 +42,8 @@ export const InitialCars: Car[] = [
     releaseDate: 2020,
     mileage: 30000,
     endDate: '2024-08-10',
-    rating: 4.9
+    rating: 4.9,
+    auctionList: '/cars/аукционный_лист.pdf'
   },
   {
     id: 5,
@@ -49,7 +53,8 @@ export const InitialCars: Car[] = [
     releaseDate: 2016,
     mileage: 60000,
     endDate: '2024-07-25',
-    rating: 4.4
+    rating: 4.4,
+    auctionList: '/cars/аукционный_лист.pdf'
   },
   {
     id: 6,
@@ -59,7 +64,8 @@ export const InitialCars: Car[] = [
     releaseDate: 2018,
     mileage: 47000,
     endDate: '2024-07-18',
-    rating: 4.6
+    rating: 4.6,
+    auctionList: '/cars/аукционный_лист.pdf'
   },
   {
     id: 7,
@@ -69,7 +75,8 @@ export const InitialCars: Car[] = [
     releaseDate: 2019,
     mileage: 40000,
     endDate: '2024-08-05',
-    rating: 4.7
+    rating: 4.7,
+    auctionList: '/cars/аукционный_лист.pdf'
   },
   {
     id: 8,
@@ -79,7 +86,8 @@ export const InitialCars: Car[] = [
     releaseDate: 2017,
     mileage: 55000,
     endDate: '2024-07-22',
-    rating: 4.3
+    rating: 4.3,
+    auctionList: '/cars/аукционный_лист.pdf'
   },
   {
     id: 9,
@@ -89,7 +97,8 @@ export const InitialCars: Car[] = [
     releaseDate: 2015,
     mileage: 75000,
     endDate: '2024-07-30',
-    rating: 4.0
+    rating: 4.0,
+    auctionList: '/cars/аукционный_лист.pdf'
   },
   {
     id: 10,
@@ -99,6 +108,7 @@ export const InitialCars: Car[] = [
     releaseDate: 2014,
     mileage: 82000,
     endDate: '2024-07-28',
-    rating: 3.9
+    rating: 3.9,
+    auctionList: '/cars/аукционный_лист.pdf'
   }
 ]
