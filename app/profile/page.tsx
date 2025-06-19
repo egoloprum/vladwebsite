@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
-import { redirect } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 const Page = ({}) => {
@@ -25,46 +25,65 @@ const Page = ({}) => {
     }
   }, [userId])
 
+  const router = useRouter()
+
+  const clickHandler = () => {
+    Cookies.remove('user')
+    router.push('/login')
+  }
+
   return (
     <div className="min-h-[100vh] flex justify-center items-center">
-      <div className="p-10 border-2">
-        <h1 className="text-center text-4xl font-bold mb-10">
+      <div className="py-10">
+        <h1 className="text-center text-4xl font-bold mb-10 px-10">
           Страница пользователя
         </h1>
         <div className="flex gap-4">
-          <div className="flex flex-col gap-2 self-start">
-            <Label className="text-md underline underline-offset-2">
-              Имя пользователя:
-            </Label>
-            <p className="text-2xl">
+          <div className="flex flex-col gap-4 self-start text-nowrap">
+            <Label className="text-xl text-gray-500">Имя пользователя:</Label>
+            <p className="text-xl text-gray-500">
               {userData ? userData.username : 'Неизвестно'}
             </p>
-            <Label className="text-md underline underline-offset-2">
-              Логин пользователя:
-            </Label>
-            <p className="text-2xl">{userData ? userData.id : 'Неизвестно'}</p>
+            <Label className="text-xl text-gray-500">Логин пользователя:</Label>
+            <p className="text-xl text-gray-500">
+              {userData ? userData.id : 'Неизвестно'}
+            </p>
           </div>
-          <div className="flex flex-col gap-4 self-center">
+          <div className="flex flex-col gap-4 self-center w-full">
             <Link href="/cars">
-              <Button className="cursor-pointer w-full" type="button">
-                Список карточек автомобилей
+              <Button
+                className="cursor-pointer w-full text-xl p-6"
+                type="button">
+                Список автомобилей
               </Button>
             </Link>
             <Link href="/cars?filter=chosen">
-              <Button className="cursor-pointer w-full" type="button">
+              <Button
+                className="cursor-pointer w-full text-xl p-6"
+                type="button">
                 Избранные автомобили
               </Button>
             </Link>
             <Link href="/cars?filter=mycars">
-              <Button className="cursor-pointer w-full" type="button">
+              <Button
+                className="cursor-pointer w-full text-xl p-6"
+                type="button">
                 Мои автомобили
               </Button>
             </Link>
             <Link href="/cars/add">
-              <Button className="cursor-pointer w-full" type="button">
+              <Button
+                className="cursor-pointer w-full text-xl p-6"
+                type="button">
                 Добавить автомобиль
               </Button>
             </Link>
+            <Button
+              className="cursor-pointer w-full text-xl p-6"
+              type="button"
+              onClick={clickHandler}>
+              Выход из системы
+            </Button>
           </div>
         </div>
       </div>

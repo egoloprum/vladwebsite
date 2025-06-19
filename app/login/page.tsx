@@ -42,12 +42,12 @@ const Page = ({}) => {
     <div className="h-[100vh] flex justify-center items-center">
       <form
         onSubmit={handleSubmit}
-        className="max-w-[400px] w-full border-2 p-4 flex flex-col gap-4">
-        <h1 className="text-center text-2xl font-bold">Форма авторизации</h1>
+        className="max-w-[400px] w-full p-4 flex flex-col gap-4">
+        <h1 className="text-center text-2xl font-bold">Авторизация</h1>
         {error && <p className="text-red-500">{error}</p>}
         <Label htmlFor="id">Логин пользователя</Label>
         <Input
-          placeholder="ID"
+          placeholder="Логин пользователя"
           type="text"
           id="id"
           value={id}
@@ -55,18 +55,18 @@ const Page = ({}) => {
         />
         <Label htmlFor="password">Пароль</Label>
         <Input
-          placeholder="password"
+          placeholder="Пароль"
           type="password"
           id="password"
           value={password}
           onChange={e => setPassword(e.target.value)}
         />
-        <div className="flex gap-4">
-          <Button type="submit" className="">
-            Вход на систему
+        <div className="grid grid-cols-2 gap-4 mt-4">
+          <Button type="submit" className="w-full cursor-pointer">
+            Войти
           </Button>
-          <Link href="/registration" className="">
-            <Button className="">Регистроваться</Button>
+          <Link href="/registration" className="w-full">
+            <Button className="w-full cursor-pointer">Регистроваться</Button>
           </Link>
         </div>
       </form>

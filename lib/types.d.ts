@@ -13,6 +13,7 @@ export interface Car {
   releaseDate: number
   mileage: number
   endDate: string
+  price: number
   rating: number
   auctionList: string
 }

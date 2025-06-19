@@ -52,12 +52,12 @@ const Page = () => {
     <div className="h-[100vh] flex justify-center items-center">
       <form
         onSubmit={handleSubmit}
-        className="max-w-[400px] w-full border-2 p-4 flex flex-col gap-4">
-        <h1 className="text-center text-2xl font-bold">Форма регистрации</h1>
+        className="max-w-[400px] w-full p-4 flex flex-col gap-4">
+        <h1 className="text-center text-2xl font-bold">Регистрация</h1>
         {error && <p className="text-red-500">{error}</p>}
         <Label htmlFor="username">Имя пользователя</Label>
         <Input
-          placeholder="username"
+          placeholder="Имя пользователя"
           type="text"
           id="username"
           value={username}
@@ -65,7 +65,7 @@ const Page = () => {
         />
         <Label htmlFor="id">Логин пользователя</Label>
         <Input
-          placeholder="ID"
+          placeholder="Логин пользователя"
           type="text"
           id="id"
           value={id}
@@ -73,13 +73,17 @@ const Page = () => {
         />
         <Label htmlFor="password">Пароль</Label>
         <Input
-          placeholder="password"
+          placeholder="Пароль"
           type="password"
           id="password"
           value={password}
           onChange={e => setPassword(e.target.value)}
         />
-        <Button type="submit">Регистроваться</Button>
+        <div className="flex justify-center">
+          <Button type="submit" className="px-12 mt-4 cursor-pointer">
+            Регистрация
+          </Button>
+        </div>
       </form>
     </div>
   )

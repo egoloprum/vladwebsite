@@ -2,7 +2,7 @@
 
 import { FC, useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
-import { redirect } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { Car, User } from '@/lib/types'
 import Image from 'next/image'
 import { Button } from './ui/button'
@@ -14,6 +14,9 @@ interface CarDetailProps {
 export const CarDetail: FC<CarDetailProps> = ({ id }) => {
   const userId = Cookies.get('user')
   const [car, setCar] = useState<Car | null>(null)
+  const [isCarCreatedByUser, setIsCarCreatedByUser] = useState<boolean>(false)
+
+  const router = useRouter()
 
   useEffect(() => {
     if (!userId) {
@@ -26,6 +29,12 @@ export const CarDetail: FC<CarDetailProps> = ({ id }) => {
         const foundCar = cars.find(car => car.id === Number(id))
         if (foundCar) {
           setCar(foundCar)
+        }
+
+        const userData = localStorage.getItem(userId)
+        if (userData) {
+          const user: User = JSON.parse(userData)
+          setIsCarCreatedByUser(user.addedCars.includes(id))
         }
       }
     }
@@ -42,6 +51,7 @@ export const CarDetail: FC<CarDetailProps> = ({ id }) => {
     const userData = localStorage.getItem(userId)
     if (userData) {
       const user: User = JSON.parse(userData)
+
       if (!user.markedCars.includes(carId.toString())) {
         user.markedCars.push(carId.toString())
         localStorage.setItem(userId, JSON.stringify(user))
@@ -74,10 +84,35 @@ export const CarDetail: FC<CarDetailProps> = ({ id }) => {
     }
   }
 
+  const handleDeleteCar = () => {
+    if (!userId) {
+      redirect('/login')
+    }
+    const userData = localStorage.getItem(userId)
+    if (userData) {
+      const user: User = JSON.parse(userData)
+      user.addedCars = user.addedCars.filter(carId => carId !== id)
+
+      localStorage.setItem(userId, JSON.stringify(user))
+      const storedCars = localStorage.getItem('cars')
+      if (storedCars) {
+        const cars: Car[] = JSON.parse(storedCars)
+        const updatedCars = cars.filter(car => car.id !== Number(id))
+        localStorage.setItem('cars', JSON.stringify(updatedCars))
+      }
+      alert('Автомобиль успешно удален!')
+      setCar(null)
+
+      router.push('/cars')
+    } else {
+      alert('Пользователь не найден!')
+    }
+  }
+
   return (
     <div>
       <div className="p-4 rounded flex gap-8 justify-center">
-        <div className="relative h-50 w-100">
+        <div className="relative h-60 w-150">
           <Image
             src={car.image}
             className="w-full h-32 object-cover mb-2"
@@ -86,26 +121,35 @@ export const CarDetail: FC<CarDetailProps> = ({ id }) => {
           />
         </div>
         <div>
-          <p className="text-xl font-semibold">
+          <p className="text-2xl font-semibold">
             {car.mark} {car.model}
           </p>
-          <p>Год выпуска: {car.releaseDate}</p>
-          <p>Пробег: {car.mileage} км</p>
-          <p>Оценка: {car.rating}</p>
-          <p>Срок действия: {car.endDate}</p>
+          <p className="text-xl">Год выпуска: {car.releaseDate}</p>
+          <p className="text-xl">Пробег: {car.mileage} км</p>
+          <p className="text-xl">Оценка: {car.rating}</p>
+          <p className="text-xl">Начальная стоимость: {car.price} руб.</p>
+          <p className="text-xl">Срок действия: {car.endDate}</p>
           <div className="flex flex-col">
             <Button
               type="button"
-              className="mt-4 cursor-pointer"
+              className="mt-4 cursor-pointer p-6 text-xl"
               onClick={() => clickHandler(car.id)}>
               Добавить в Избранные
             </Button>
             <Button
               type="button"
-              className="mt-4 cursor-pointer"
+              className="mt-4 cursor-pointer p-6 text-xl"
               onClick={handleDownloadClick}>
               Скачать аукционный лист
             </Button>
+            {isCarCreatedByUser && (
+              <Button
+                type="button"
+                className="mt-4 cursor-pointer p-6 text-xl"
+                onClick={handleDeleteCar}>
+                Удалить автомобиль
+              </Button>
+            )}
           </div>
         </div>
       </div>
