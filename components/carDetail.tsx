@@ -12,30 +12,26 @@ interface CarDetailProps {
 }
 
 export const CarDetail: FC<CarDetailProps> = ({ id }) => {
-  const userId = Cookies.get('user')
+  const userId = Cookies.get('user') || 'user'
   const [car, setCar] = useState<Car | null>(null)
   const [isCarCreatedByUser, setIsCarCreatedByUser] = useState<boolean>(false)
 
   const router = useRouter()
 
   useEffect(() => {
-    if (!userId) {
-      redirect('/login')
-    } else {
-      const storedCars = localStorage.getItem('cars')
-      if (storedCars) {
-        const cars: Car[] = JSON.parse(storedCars)
+    const storedCars = localStorage.getItem('cars')
+    if (storedCars) {
+      const cars: Car[] = JSON.parse(storedCars)
 
-        const foundCar = cars.find(car => car.id === Number(id))
-        if (foundCar) {
-          setCar(foundCar)
-        }
+      const foundCar = cars.find(car => car.id === Number(id))
+      if (foundCar) {
+        setCar(foundCar)
+      }
 
-        const userData = localStorage.getItem(userId)
-        if (userData) {
-          const user: User = JSON.parse(userData)
-          setIsCarCreatedByUser(user.addedCars.includes(id))
-        }
+      const userData = localStorage.getItem(userId)
+      if (userData) {
+        const user: User = JSON.parse(userData)
+        setIsCarCreatedByUser(user.addedCars.includes(id))
       }
     }
   }, [userId, id])
@@ -45,9 +41,6 @@ export const CarDetail: FC<CarDetailProps> = ({ id }) => {
   }
 
   const clickHandler = (carId: number) => {
-    if (!userId) {
-      redirect('/login')
-    }
     const userData = localStorage.getItem(userId)
     if (userData) {
       const user: User = JSON.parse(userData)
@@ -61,6 +54,7 @@ export const CarDetail: FC<CarDetailProps> = ({ id }) => {
       }
     } else {
       alert('Пользователь не найден!')
+      redirect('/login')
     }
   }
 
